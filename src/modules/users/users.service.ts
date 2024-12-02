@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dtos/create-users.dto';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findAll(): Promise<User[]> {
@@ -19,12 +19,20 @@ export class UsersService {
   }
 
   async findOne(userId:string): Promise<User>{
-    const getUser = await this.userModel.findById(userId).exec();
-    if(!getUser){
-        throw new NotFoundException(`Student #${userId} not found`);
+    try {
+      const getUser = await this.userModel.findById(userId).exec();
+      return getUser;
+    } catch (error) {
+      throw new NotFoundException(`User #${userId} not found`)
     }
-    return getUser;
   }
 
-  
+  async findOneWithEmail(email:string): Promise<User>{
+    try {
+      const getUser = await this.userModel.findOne({email}).exec();
+      return getUser;
+    } catch (error) {
+      throw new NotFoundException(`User #${email} not found`)
+    }
+  }
 }
