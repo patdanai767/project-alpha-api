@@ -5,7 +5,7 @@ import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UsersService){}
+    // constructor(private usersService: UsersService){}
 
     // async signIn(CreateUserDto:CreateUserDto):Promise<User>{
 
