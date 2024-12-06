@@ -3,6 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/modules/users/users.service';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
 import { AuthResponseDto } from './dtos/auth-response.dto';
+import { RegisterDto } from './dtos/register.dto';
+import { CreateUserDto } from '../users/dtos/create-users.dto';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +32,10 @@ export class AuthService {
 
     return { accessToken, user };
   }
+
+  // async register(CreateUserDto:CreateUserDto): Promise<RegisterDto>{
+  //   const accessToken = await this.generateAccessToken()
+  // }
 
   private generateAccessToken(payload: JwtPayloadDto) {
     return this.jwtService.signAsync(payload);

@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req, HttpStatus } from '@nestjs/common';
 import { UserService } from './users.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 import { UserResponseDto } from './dtos/response-users.dto';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -25,6 +26,12 @@ export class UsersController {
   }
 
   @Get('/profile')
+  @ApiBearerAuth()
+  @ApiResponse({
+      status: HttpStatus.OK,
+      type:UserResponseDto,
+      description:'Get user profile'
+  })
   async getProfile(
     @Req() request: AuthenticatedRequest,
   ): Promise<UserResponseDto> {

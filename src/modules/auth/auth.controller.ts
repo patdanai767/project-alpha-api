@@ -1,29 +1,22 @@
 import {
   Body,
   Controller,
-  HttpCode,
   HttpStatus,
   Post,
-  Request,
-  UseGuards,
-  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description:'Login already',
+  })
   signIn(@Body() signInDto: Record<string, string>) {
     return this.authService.login(signInDto.email, signInDto.password);
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
   }
 }
