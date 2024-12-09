@@ -7,5 +7,5 @@ export class BaseSchema {
   createdAt: Date;
 
   @Prop()
-  updateAt: Date;
+  updatedAt: Date;
 }

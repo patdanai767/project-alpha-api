@@ -1,6 +1,3 @@
-export class RegisterDto {
-    username: string;
-    fullname:string;
-    email:string
-    password:string;
-}
+import { CreateUserDto } from "src/modules/users/dtos/create-users.dto";
+
+export class RegisterDto extends CreateUserDto{}

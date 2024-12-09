@@ -17,7 +17,7 @@ export class UsersController {
 
   @Get(`/:id`)
   async getUser(@Param('id') userId: string): Promise<User> {
-    return this.userService.findOne(userId);
+    return this.userService.getUserById(userId);
   }
 
   @Post()
@@ -35,7 +35,7 @@ export class UsersController {
   async getProfile(
     @Req() request: AuthenticatedRequest,
   ): Promise<UserResponseDto> {
-    const user = await this.userService.findOne(request.user.id);
+    const user = await this.userService.getUserById(request.user.sub);
     return user;
   }
 }

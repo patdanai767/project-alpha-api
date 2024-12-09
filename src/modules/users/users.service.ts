@@ -18,18 +18,17 @@ export class UserService {
     return createUser.save();
   }
 
-  async findOne(userId:string): Promise<User>{
-    try {
-      const getUser = await this.userModel.findById(userId).exec();
-      return getUser;
-    } catch (error) {
-      throw new NotFoundException(`User #${userId} not found`)
-    }
+  async getUserByUsername(username:string):Promise<User>{
+    return this.userModel.findOne({username}).lean();
   }
 
-  async findOneWithEmail(email:string): Promise<User>{
+  async getUserById(userId: string):Promise<User>{
+    return this.userModel.findById(userId).lean()
+  }
+
+  async getUserByEmail(email:string): Promise<User>{
     try {
-      const getUser = await this.userModel.findOne({email}).exec();
+      const getUser = await this.userModel.findOne({email}).lean();
       return getUser;
     } catch (error) {
       throw new NotFoundException(`User #${email} not found`)

@@ -1,10 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/modules/users/users.service';
-import { JwtPayloadDto } from './dtos/jwt-payload.dto';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterDto } from './dtos/register.dto';
-import { CreateUserDto } from '../users/dtos/create-users.dto';
+import { LoginDto } from './dtos/login.dto';
+import { JwtInterface } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -13,31 +13,34 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(email: string, pwd: string): Promise<AuthResponseDto> {
-    const user = await this.userService.findOneWithEmail(email);
-    if (user?.password !== pwd) {
-      throw new UnauthorizedException();
+  async login(LoginDto:LoginDto): Promise<AuthResponseDto> {
+    const existsUser = await this.userService.getUserByEmail(LoginDto.email);
+    if (existsUser.password !== LoginDto.pwd) {
+      throw new UnauthorizedException(); //Bug
     }
-    const accessToken = await this.generateAccessToken({
-      id: user._id,
-      resume_id: user.resume_id,
-      username: user.username,
-      fullname: user.fullname,
-      email: user.email,
-      bio: user.bio,
-      profileImage: user.profileImage,
-      ranking: user.ranking,
-      role: user.role,
-    });
-
+    const accessToken = await this.generateAccessToken(existsUser._id.toString())
+    const {password , ...user} = existsUser;
     return { accessToken, user };
   }
 
-  // async register(CreateUserDto:CreateUserDto): Promise<RegisterDto>{
-  //   const accessToken = await this.generateAccessToken()
-  // }
+  async register(RegisterDto:RegisterDto): Promise<AuthResponseDto>{
+    const existEmail = await this.userService.getUserByEmail(RegisterDto.email)
+    const existUsername = await this.userService.getUserByUsername(RegisterDto.username)
+    if(existEmail){
+      throw new ConflictException('Email already exists');
+    }
+    if(existUsername){
+      throw new ConflictException('Username already exists');
+    }
+    
+    const user = await this.userService.createUser(RegisterDto);
+    const accessToken = await this.generateAccessToken(user._id.toString());
 
-  private generateAccessToken(payload: JwtPayloadDto) {
+    return {user,accessToken}
+  }
+
+  private generateAccessToken(userId: string):Promise<string> {
+    const payload: JwtInterface = {sub: userId};
     return this.jwtService.signAsync(payload);
   }
 }

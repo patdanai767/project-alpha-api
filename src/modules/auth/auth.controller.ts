@@ -6,6 +6,9 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiResponse } from '@nestjs/swagger';
+import { LoginDto } from './dtos/login.dto';
+import { AuthResponseDto } from './dtos/auth-response.dto';
+import { RegisterDto } from './dtos/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +19,16 @@ export class AuthController {
     status: HttpStatus.OK,
     description:'Login already',
   })
-  signIn(@Body() signInDto: Record<string, string>) {
-    return this.authService.login(signInDto.email, signInDto.password);
+  signIn(@Body() LoginDto: LoginDto):Promise<AuthResponseDto> {
+    return this.authService.login(LoginDto);
+  }
+
+  @Post('register')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Register success',
+  })
+  register(@Body() RegisterDto:RegisterDto):Promise<AuthResponseDto>{
+    return this.authService.register(RegisterDto);
   }
 }

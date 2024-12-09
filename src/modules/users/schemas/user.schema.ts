@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Role } from 'src/shared/enums/roles.enums';
 import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User extends BaseSchema {
+
   @Prop()
   resume_id: string;
 
@@ -39,7 +41,7 @@ export class User extends BaseSchema {
   @Prop({
     default: 'trainee',
   })
-  role: string;
+  role: Role;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
