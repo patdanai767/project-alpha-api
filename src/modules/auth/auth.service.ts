@@ -4,7 +4,7 @@ import { UserService } from 'src/modules/users/users.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
-import { JwtInterface } from './interfaces/jwt-payload.interface';
+import { JwtInterface } from './interfaces/jwt-payload.interface'
 
 @Injectable()
 export class AuthService {
@@ -15,9 +15,11 @@ export class AuthService {
 
   async login(LoginDto:LoginDto): Promise<AuthResponseDto> {
     const existsUser = await this.userService.getUserByEmail(LoginDto.email);
-    if (existsUser.password !== LoginDto.pwd) {
-      throw new UnauthorizedException(); //Bug
+
+    if (!(LoginDto.password === existsUser.password)) {
+      throw new UnauthorizedException('Invalid password');
     }
+    
     const accessToken = await this.generateAccessToken(existsUser._id.toString())
     const {password , ...user} = existsUser;
     return { accessToken, user };
