@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, Req, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Req, HttpStatus, UseGuards, Request } from '@nestjs/common';
 import { UserService } from './users.service';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 import { UserResponseDto } from './dtos/response-users.dto';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/commons/jwt.guard';
 
 @Controller('users')
 export class UsersController {
@@ -15,10 +16,10 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get(`/:id`)
-  async getUser(@Param('id') userId: string): Promise<User> {
-    return this.userService.getUserById(userId);
-  }
+  // @Get(`/:id`)
+  // async getUser(@Param('id') userId: string): Promise<User> {
+  //   return this.userService.getProfile(userId);
+  // }
 
   @Post()
   async createUser(@Body() CreateUserDto: CreateUserDto): Promise<User> {
@@ -26,6 +27,7 @@ export class UsersController {
   }
 
   @Get('/profile')
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiResponse({
       status: HttpStatus.OK,
@@ -33,9 +35,9 @@ export class UsersController {
       description:'Get user profile'
   })
   async getProfile(
-    @Req() request: AuthenticatedRequest,
+    @Request() req: AuthenticatedRequest,
   ): Promise<UserResponseDto> {
-    const user = await this.userService.getUserById(request.user.sub);
+    const user = await this.userService.getProfile(req.user._id);
     return user;
   }
 }

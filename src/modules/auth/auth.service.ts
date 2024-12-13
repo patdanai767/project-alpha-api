@@ -20,7 +20,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid password');
     }
     
-    const accessToken = await this.generateAccessToken(existsUser._id.toString())
+    const accessToken = await this.generateAccessToken(existsUser._id)
     const {password , ...user} = existsUser;
     return { accessToken, user };
   }
@@ -36,7 +36,7 @@ export class AuthService {
     }
     
     const user = await this.userService.createUser(RegisterDto);
-    const accessToken = await this.generateAccessToken(user._id.toString());
+    const accessToken = await this.generateAccessToken(user._id);
 
     return {user,accessToken}
   }

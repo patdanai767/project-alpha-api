@@ -1,6 +1,6 @@
 import { Request } from "express";
-import { JwtInterface } from "./jwt-payload.interface";
+import { UserResponseDto } from "src/modules/users/dtos/response-users.dto";
 
 export interface AuthenticatedRequest extends Request {
-    user: JwtInterface
+    user: UserResponseDto
 }
