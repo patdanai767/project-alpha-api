@@ -7,7 +7,7 @@ import { UserResponseDto } from './dtos/response-users.dto';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/commons/jwt.guard';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
@@ -15,11 +15,6 @@ export class UsersController {
   async getUsers(): Promise<User[]> {
     return this.userService.findAll();
   }
-
-  // @Get(`/:id`)
-  // async getUser(@Param('id') userId: string): Promise<User> {
-  //   return this.userService.getProfile(userId);
-  // }
 
   @Post()
   async createUser(@Body() CreateUserDto: CreateUserDto): Promise<User> {

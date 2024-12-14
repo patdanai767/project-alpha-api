@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CoursesModule } from './modules/courses/courses.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { CoursesModule } from './modules/courses/courses.module';
     MongooseModule.forRoot(process.env.MONDB_URI),
     UsersModule,
     AuthModule,
-    CoursesModule
+    CoursesModule,
+    CategoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],
