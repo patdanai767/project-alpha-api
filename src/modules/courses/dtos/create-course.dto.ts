@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional } from "class-validator";
 import { CourseStatus } from "src/shared/enums/status.enums";
 
 export class CreateCourseDto {
@@ -67,4 +67,20 @@ export class CreateCourseDto {
         enum: CourseStatus
     })
     status:string;
+
+    @IsOptional()
+    @ApiProperty({
+        example: '674dc031e4abc295ad582d4',
+        type:String,
+        description: 'Course createBy'
+    })
+    createBy:string;
+
+    @IsOptional()
+    @ApiProperty({
+        example: '[674dc031e124aabacad582d4, 67gw3031e124abcacad124d4]',
+        type:[String],
+        description: 'Course trainees'
+    })
+    trainees?:string[];
 }

@@ -1,8 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { CategoryService } from './categories.service';
 import { Category } from './schemas/cat.schema';
 import { CreateCatDto } from './dtos/create-cat.dtos';
 import { UpdateCatDto } from './dtos/update-cat.dtos';
+import { JwtAuthGuard } from '../auth/commons/guards/jwt.guard';
+import { RoleGuard } from '../auth/commons/guards/role.guard';
+import { Roles } from '../auth/commons/decorators/roles.decorator';
+import { UserRole } from 'src/shared/enums/roles.enums';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('category')
 export class CategoryController {
@@ -19,11 +24,17 @@ export class CategoryController {
   }
 
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard,RoleGuard)
+  @Roles(UserRole.ADMIN)
   async createCat(@Body() CreateCatDto: CreateCatDto): Promise<Category> {
     return this.categoryService.createCat(CreateCatDto);
   }
 
   @Patch('/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard,RoleGuard)
+  @Roles(UserRole.ADMIN)
   async updateCat(
     @Param('id') catId: string,
     @Body() UpdateCatDto: UpdateCatDto,
@@ -32,6 +43,9 @@ export class CategoryController {
   }
 
   @Delete('/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard,RoleGuard)
+  @Roles(UserRole.ADMIN)
   async deleteCat(@Param('id') catId:string){
     return this.categoryService.deleteCat(catId)
   }
