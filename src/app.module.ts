@@ -7,6 +7,11 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { RatingModule } from './modules/rating/rating.module';
+import { ResumeModule } from './modules/resume/resume.module';
+import { EducationModule } from './modules/education/education.module';
+import { WorkExperienceModule } from './modules/work-experience/work-experience.module';
+import { CertificationModule } from './modules/certification/certification.module';
 
 @Module({
   imports: [
@@ -18,7 +23,12 @@ import { CategoriesModule } from './modules/categories/categories.module';
     UsersModule,
     AuthModule,
     CoursesModule,
-    CategoriesModule
+    CategoriesModule,
+    RatingModule,
+    ResumeModule,
+    EducationModule,
+    WorkExperienceModule,
+    CertificationModule
   ],
   controllers: [AppController],
   providers: [AppService],
