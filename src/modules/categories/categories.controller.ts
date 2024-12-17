@@ -3,11 +3,11 @@ import { CategoryService } from './categories.service';
 import { Category } from './schemas/cat.schema';
 import { CreateCatDto } from './dtos/create-cat.dtos';
 import { UpdateCatDto } from './dtos/update-cat.dtos';
-import { JwtAuthGuard } from '../auth/commons/guards/jwt.guard';
-import { RoleGuard } from '../auth/commons/guards/role.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Roles } from '../auth/commons/decorators/roles.decorator';
 import { UserRole } from 'src/shared/enums/roles.enums';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { RoleGuard } from '../auth/commons/guards/role.guard';
+import { JwtAuthGuard } from '../auth/commons/guards/jwt.guard';
 
 @Controller('category')
 export class CategoryController {

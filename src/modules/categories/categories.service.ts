@@ -27,6 +27,6 @@ export class CategoryService {
   }
 
   async deleteCat(id: string): Promise<Category> {
-    return this.catModel.findByIdAndUpdate(id);
+    return this.catModel.findByIdAndDelete(id);
   }
 }

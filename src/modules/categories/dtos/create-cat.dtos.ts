@@ -4,7 +4,7 @@ import { IsNotEmpty } from "class-validator";
 export class CreateCatDto {
     @IsNotEmpty()
     @ApiProperty({
-        example: '',
+        example: 'Weight training',
         type:String,
         description: 'Category title'
     })

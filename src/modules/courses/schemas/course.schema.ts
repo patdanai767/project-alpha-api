@@ -1,5 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import {
+  CatDocument,
+  Category
+} from 'src/modules/categories/schemas/cat.schema';
+import {
+  Rating,
+  RatingDocument,
+} from 'src/modules/rating/schemas/rating.schema';
 import { User, UserDocument } from 'src/modules/users/schemas/user.schema';
 import { BaseSchema } from 'src/shared/schemas/base.schema';
 
@@ -7,11 +15,11 @@ export type CourseDocument = HydratedDocument<Course>;
 
 @Schema()
 export class Course extends BaseSchema {
-  @Prop()
-  category_id: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })
+  category: CatDocument;
 
-  @Prop()
-  rating_id: string;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: Rating.name }] })
+  rating: RatingDocument[];
 
   @Prop()
   title: string;
