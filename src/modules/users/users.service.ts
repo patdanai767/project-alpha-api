@@ -28,7 +28,8 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email }).lean().exec();
+    const user = await this.userModel.findOne({email}).lean();
+    return this.userModel.findById(user._id);
   }
 
   async deleteUserById(userId: string): Promise<User> {
