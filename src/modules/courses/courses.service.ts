@@ -9,16 +9,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateCourseDto } from './dtos/create-course.dto';
 import { UpdateCourseDto } from './dtos/update-course.dto';
 import { User } from '../users/schemas/user.schema';
+import { ReviewCourseDto } from './dtos/review-course.dto';
+import { Rating } from '../rating/schemas/rating.schema';
 
 @Injectable()
 export class CourseService {
   constructor(
     @InjectModel(Course.name) private CourseModel: Model<Course>,
     @InjectModel(User.name) private UserModel: Model<User>,
+    @InjectModel(Rating.name) private RatingModel:Model<Rating>,
   ) {}
 
   async findAll(): Promise<Course[]> {
-    return this.CourseModel.find().populate("trainees"); //populate => แปลง _id เป็น object หรือ ก็คือ relation
+    return this.CourseModel.find().populate(['trainees', 'rating']); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
   async findById(id: string): Promise<Course> {
@@ -29,7 +32,6 @@ export class CourseService {
     CreateCourseDto: CreateCourseDto,
     userId: string,
   ): Promise<Course> {
-
     return this.CourseModel.create({
       createdBy: userId,
       ...CreateCourseDto,
@@ -78,6 +80,24 @@ export class CourseService {
         $push: { trainees: userId },
       },
       { new: true },
+    );
+  }
+
+  async reviewCourse(
+    ReviewCourseDto: ReviewCourseDto,
+    userId: string,
+    courseId: string,
+  ): Promise<Course> {
+    const createRating = await this.RatingModel.create({user_id:userId, ...ReviewCourseDto});
+
+    return await this.CourseModel.findByIdAndUpdate(
+      courseId,
+      {
+        $push: { rating: createRating},
+      },
+      {
+        new: true,
+      },
     );
   }
 }

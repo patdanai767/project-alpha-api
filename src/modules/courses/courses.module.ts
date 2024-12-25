@@ -3,7 +3,6 @@ import { CourseService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Course, CourseSchema } from './schemas/course.schema';
-import { UsersModule } from '../users/users.module';
 import { User, UserSchema } from '../users/schemas/user.schema';
 import { Category, CatSchema } from '../categories/schemas/cat.schema';
 import { Rating, RatingSchema } from '../rating/schemas/rating.schema';
@@ -19,5 +18,6 @@ import { Rating, RatingSchema } from '../rating/schemas/rating.schema';
   ],
   providers: [CourseService],
   controllers: [CoursesController],
+  exports: [CourseService]
 })
 export class CoursesModule {}

@@ -19,6 +19,7 @@ import { Roles } from '../auth/commons/decorators/roles.decorator';
 import { UserRole } from 'src/shared/enums/roles.enums';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
+import { ReviewCourseDto } from './dtos/review-course.dto';
 
 @Controller('course')
 export class CoursesController {
@@ -42,7 +43,7 @@ export class CoursesController {
     @Body() CreateCourseDto: CreateCourseDto,
     @Request() req: AuthenticatedRequest,
   ): Promise<Course> {
-    return this.courseService.createCourse(CreateCourseDto,req.user._id);
+    return this.courseService.createCourse(CreateCourseDto, req.user._id);
   }
 
   @Patch('/:id')
@@ -72,5 +73,20 @@ export class CoursesController {
     @Request() req: AuthenticatedRequest,
   ) {
     return this.courseService.enrollCourse(req.user._id, courseId);
+  }
+
+  @Patch('/:id/review')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async reviewCourse(
+    @Body() ReviewCourseDto: ReviewCourseDto,
+    @Param('id') courseId: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<Course> {
+    return this.courseService.reviewCourse(
+      ReviewCourseDto,
+      req.user._id,
+      courseId,
+    );
   }
 }

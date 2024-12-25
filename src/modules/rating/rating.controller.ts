@@ -24,14 +24,15 @@ export class RatingController {
     return this.ratingService.findAll();
   }
 
-  @Post()
+  @Post('/:courseId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async createRating(
     @Body() CreateRatingDto: CreateRatingDto,
     @Request() req: AuthenticatedRequest,
+    @Param('id') courseId:string
   ): Promise<Rating> {
-    return this.ratingService.createRating(CreateRatingDto, req.user._id);
+    return this.ratingService.createRating(CreateRatingDto, req.user._id, courseId);
   }
 
   @Delete('/:id')
