@@ -45,6 +45,9 @@ export class User extends BaseSchema {
     default: 'trainee',
   })
   role: UserRole;
+
+  @Prop()
+  sex: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

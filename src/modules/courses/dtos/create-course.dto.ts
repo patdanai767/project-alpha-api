@@ -15,7 +15,7 @@ export class CreateCourseDto {
         type: String,
         description: 'Course ratingId'
     })
-    rating_id?:string;
+    rating?:string;
 
     @IsNotEmpty()
     @ApiProperty({

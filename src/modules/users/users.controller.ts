@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Param, Req, HttpStatus, UseGuards, Request, Delete, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Req,
+  HttpStatus,
+  UseGuards,
+  Request,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { UserService } from './users.service';
 import { User } from './schemas/user.schema';
-import { CreateUserDto } from './dtos/create-users.dto';
 import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 import { UserResponseDto } from './dtos/response-users.dto';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -10,13 +21,18 @@ import { RoleGuard } from '../auth/commons/guards/role.guard';
 import { Roles } from '../auth/commons/decorators/roles.decorator';
 import { UserRole } from 'src/shared/enums/roles.enums';
 import { UpdateUserDto } from './dtos/update-users.dto';
+import { ResumeService } from '../resume/resume.service';
+import { CreateResumeDto } from '../resume/dtos/create-resume.dto';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly resumeService: ResumeService,
+  ) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard,RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
   async getUsers(): Promise<User[]> {
@@ -27,9 +43,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiResponse({
-      status: HttpStatus.OK,
-      type:UserResponseDto,
-      description:'Get user profile'
+    status: HttpStatus.OK,
+    type: UserResponseDto,
+    description: 'Get user profile',
   })
   async getProfile(
     @Request() req: AuthenticatedRequest,
@@ -39,18 +55,45 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  @UseGuards(JwtAuthGuard,RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(UserRole.ADMIN)
   @ApiBearerAuth()
-  async deleteUser(@Param('id') userId:string):Promise<User>{
+  async deleteUser(@Param('id') userId: string): Promise<User> {
     return await this.userService.deleteUserById(userId);
   }
 
   @Patch('/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async updateUser(@Param('id') userId:string, @Body() dataUpdate:UpdateUserDto):Promise<User>{
-    return await this.userService.patchUserById(userId,dataUpdate);
+  async updateUser(
+    @Param('id') userId: string,
+    @Body() dataUpdate: UpdateUserDto,
+  ): Promise<User> {
+    return await this.userService.patchUserById(userId, dataUpdate);
   }
 
+  @Patch('/profile/resume')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async updateResumeByUserId(
+    @Request() req: AuthenticatedRequest,
+    @Body() CreateResumeDto: CreateResumeDto,
+  ): Promise<User> {
+    //fix AuthenticatedRequest
+    const ExistResume = await this.resumeService.findById(req.user._id);
+    if (!ExistResume) {
+      const createResume =
+        await this.resumeService.createResume(CreateResumeDto);
+      const ResumeFind = await this.resumeService.findById(createResume._id);
+      return await this.userService.updateResumeByUser(
+        req.user._id,
+        ResumeFind._id,
+      );
+    }
+    const ResumeFind = await this.resumeService.findById(ExistResume._id);
+    return await this.userService.updateResumeByUser(
+      req.user._id,
+      ResumeFind._id,
+    );
+  }
 }

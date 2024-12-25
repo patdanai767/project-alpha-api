@@ -5,7 +5,7 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 export type WorkExperienceDocument = HydratedDocument<WorkExp>;
 
 @Schema()
-export class WorkExp extends BaseSchema {
+export class WorkExp extends BaseSchema{
   @Prop()
   title: string;
 
@@ -13,7 +13,7 @@ export class WorkExp extends BaseSchema {
   description: string;
 
   @Prop()
-  duration: number;
+  duration: string;
 }
 
 export const WorkExpSchema = SchemaFactory.createForClass(WorkExp);

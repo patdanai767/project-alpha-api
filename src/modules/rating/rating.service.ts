@@ -6,20 +6,25 @@ import { CreateRatingDto } from './dtos/create-rating.dto';
 
 @Injectable()
 export class RatingService {
-    constructor(@InjectModel(Rating.name) private ratingModel:Model<Rating>) {}
+  constructor(@InjectModel(Rating.name) private ratingModel: Model<Rating>) {}
 
-    async findAll(): Promise<Rating[]>{
-        return await this.ratingModel.find();
-    }
+  async findAll(): Promise<Rating[]> {
+    return await this.ratingModel.find();
+  }
 
-    async createRating(CreateRatingDto:CreateRatingDto,userId:string):Promise<Rating>{
-        return this.ratingModel.create({
-            user_id:userId,
-            ...CreateRatingDto,
-        })
-    }
+  async createRating(
+    CreateRatingDto: CreateRatingDto,
+    userId: string,
+    courseId: string,
+  ): Promise<Rating> {
+    return this.ratingModel.create({
+      course_id: courseId,
+      user_id: userId,
+      ...CreateRatingDto,
+    });
+  }
 
-    async deleteRatingById(id:string):Promise<Rating>{
-        return this.ratingModel.findByIdAndDelete(id);
-    }
+  async deleteRatingById(id: string): Promise<Rating> {
+    return this.ratingModel.findByIdAndDelete(id);
+  }
 }

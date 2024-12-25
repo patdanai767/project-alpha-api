@@ -1,24 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { EducationDocument, EducationSchema } from './education.schema';
-import { WorkExpSchema, WorkExperienceDocument } from './workexp.schema';
-import {
-  CertificationDocument,
-  CertificationSchema,
-} from './certificate.schema';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { BaseSchema } from 'src/shared/schemas/base.schema';
+import { Education, EducationDocument } from 'src/modules/education/schemas/education.schema';
+import { WorkExp, WorkExperienceDocument } from 'src/modules/work-exps/schemas/work-exp.schema';
+import { Certification, CertificationDocument } from 'src/modules/certifies/schemas/certifies.schema';
 
 export type ResumeDocument = HydratedDocument<Resume>;
 
 @Schema()
 export class Resume extends BaseSchema {
-  @Prop({ type: EducationSchema })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: Education.name })
   education: EducationDocument;
 
-  @Prop({ type: WorkExpSchema })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: WorkExp.name })
   work_experience: WorkExperienceDocument;
 
-  @Prop({ type: CertificationSchema })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: Certification.name })
   certification: CertificationDocument;
 }
 
