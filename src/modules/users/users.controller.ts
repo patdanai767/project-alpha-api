@@ -1,11 +1,8 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
-  Req,
-  HttpStatus,
   UseGuards,
   Request,
   Delete,
@@ -15,7 +12,7 @@ import { UserService } from './users.service';
 import { User } from './schemas/user.schema';
 import { AuthenticatedRequest } from '../auth/interfaces/authenticated-request.interface';
 import { UserResponseDto } from './dtos/response-users.dto';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/commons/guards/jwt.guard';
 import { RoleGuard } from '../auth/commons/guards/role.guard';
 import { Roles } from '../auth/commons/decorators/roles.decorator';
@@ -42,16 +39,13 @@ export class UsersController {
   @Get('/profile')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     type: UserResponseDto,
-    description: 'Get user profile',
   })
   async getProfile(
     @Request() req: AuthenticatedRequest,
   ): Promise<UserResponseDto> {
-    const user = await this.userService.getProfile(req.user._id);
-    return user;
+    return await this.userService.getProfile(req.user._id);
   }
 
   @Delete('/:id')

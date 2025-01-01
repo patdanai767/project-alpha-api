@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -19,6 +20,10 @@ export class AuthService {
 
   async login(LoginDto: LoginDto): Promise<AuthResponseDto> {
     const existsUser = await this.userService.getUserByEmail(LoginDto.email);
+
+    if (!existsUser) {
+      throw new NotFoundException()
+    }
 
     if (!(LoginDto.password === existsUser.password)) {
       throw new UnauthorizedException('Invalid password');

@@ -16,6 +16,6 @@ import { ResumeModule } from '../resume/resume.module';
   ],
   controllers: [UsersController],
   providers: [UserService],
-  exports: [UserService],
+  exports: [UserService,UsersModule],
 })
 export class UsersModule {}

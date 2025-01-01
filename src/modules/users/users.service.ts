@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { UpdateUserDto } from './dtos/update-users.dto';
 import { Resume } from '../resume/schemas/resume.schema';
+import { UserResponseDto } from './dtos/response-users.dto';
 
 @Injectable()
 export class UserService {
@@ -24,15 +25,32 @@ export class UserService {
   }
 
   async getUserByUsername(username: string): Promise<User> {
-    return await this.userModel.findOne({ username: username });
+    return await this.userModel
+      .findOne({ username: username })
+      .lean<User>()
+      .exec();
   }
 
-  async getProfile(userId: string): Promise<User> {
-    return this.userModel.findById(userId);
+  async getProfile(userId: string): Promise<UserResponseDto> {
+    const user = await this.userModel.findById(userId).lean<User>().exec();
+    const {
+      resume,
+      bio,
+      sex,
+      ranking,
+      profileImage,
+      password,
+      ...responseUser
+    } = user;
+    return responseUser;
+  }
+
+  async findById(id: string): Promise<User> {
+    return await this.userModel.findById(id);
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email: email });
+    return await this.userModel.findOne({ email: email }).lean<User>().exec();
   }
 
   async deleteUserById(userId: string): Promise<User> {
