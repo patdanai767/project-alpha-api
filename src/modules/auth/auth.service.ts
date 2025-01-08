@@ -22,7 +22,7 @@ export class AuthService {
     const existsUser = await this.userService.getUserByEmail(LoginDto.email);
 
     if (!existsUser) {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
 
     if (!(LoginDto.password === existsUser.password)) {
