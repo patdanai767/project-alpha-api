@@ -12,6 +12,8 @@ import { ResumeModule } from './modules/resume/resume.module';
 import { EducationModule } from './modules/education/education.module';
 import { CertifiesModule } from './modules/certifies/certifies.module';
 import { WorkExpsModule } from './modules/work-exps/work-exps.module';
+import { ConversationModule } from './modules/conversation/conversation.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { WorkExpsModule } from './modules/work-exps/work-exps.module';
     AuthModule,
     UsersModule,
     CoursesModule,
+    ConversationModule,
+    NotificationModule,
     CategoriesModule,
     RatingModule,
     ResumeModule,

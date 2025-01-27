@@ -4,14 +4,14 @@ import {
   IsStrongPassword,
   IsNotEmpty,
   IsString,
+  IsOptional,
 } from 'class-validator';
-import mongoose from 'mongoose';
-import { ResumeDocument } from 'src/modules/resume/schemas/resume.schema';
 import { UserRole } from 'src/shared/enums/roles.enums';
 
 export class CreateUserDto {
   @ApiProperty({
     type: String,
+    example:"pat"
   })
   @IsString()
   @IsNotEmpty()
@@ -19,6 +19,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     type: String,
+    example:"patpat"
   })
   @IsString()
   @IsNotEmpty()
@@ -26,6 +27,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     type: String,
+    example:"patprc@gmail.com"
   })
   @IsNotEmpty()
   @IsEmail()
@@ -33,18 +35,28 @@ export class CreateUserDto {
 
   @ApiProperty({
     type: String,
+    example:"P@ssw0rd!"
   })
   @IsStrongPassword()
   @IsNotEmpty()
   password: string;
 
+  @ApiProperty({
+    type:String,
+    example:"trainee"
+  })
+  @IsOptional()
   role?: UserRole;
 
+  @IsOptional()
   sex?: string;
 
+  @IsOptional()
   bio?: string;
 
+  @IsOptional()
   profileImage?: string;
 
-  resume?: ResumeDocument;
+  @IsOptional()
+  resume?: string;
 }

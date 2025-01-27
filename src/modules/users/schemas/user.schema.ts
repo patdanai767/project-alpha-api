@@ -11,7 +11,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User extends BaseSchema {
-  @Prop({ type: mongoose.Schema.ObjectId, ref: Resume.name, unique: true })
+  @Prop({ type: mongoose.Schema.ObjectId, ref: Resume.name})
   resume: ResumeDocument;
 
   @Prop({
