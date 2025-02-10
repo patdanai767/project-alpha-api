@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Course } from './schemas/course.schema';
+import { Course, CourseDocument } from './schemas/course.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateCourseDto } from './dtos/create-course.dto';
@@ -20,19 +20,19 @@ export class CourseService {
     @InjectModel(Rating.name) private RatingModel:Model<Rating>,
   ) {}
 
-  async findAll(): Promise<Course[]> {
+  async findAll(): Promise<CourseDocument[]> {
     return this.CourseModel.find().populate(['trainees', 'rating', 'category']); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
-  async findById(id: string): Promise<Course> {
+  async findById(id: string): Promise<CourseDocument> {
     return this.CourseModel.findById(id);
   }
 
   async createCourse(
     CreateCourseDto: CreateCourseDto,
     userId: string,
-  ): Promise<Course> {
-    return this.CourseModel.create({
+  ): Promise<CourseDocument> {
+    return await this.CourseModel.create({
       createdBy: userId,
       ...CreateCourseDto,
     });
@@ -41,17 +41,17 @@ export class CourseService {
   async updataCourseById(
     id: string,
     UpdateCourseDto: UpdateCourseDto,
-  ): Promise<Course> {
+  ): Promise<CourseDocument> {
     return this.CourseModel.findByIdAndUpdate(id, UpdateCourseDto, {
       new: true,
     });
   }
 
-  async deleteCourseById(id: string): Promise<Course> {
+  async deleteCourseById(id: string): Promise<CourseDocument> {
     return this.CourseModel.findByIdAndDelete(id);
   }
 
-  async enrollCourse(userId: string, courseId: string): Promise<Course> {
+  async enrollCourse(userId: string, courseId: string): Promise<CourseDocument> {
     const course = await this.CourseModel.findById(courseId);
     if (!course) {
       throw new NotFoundException('Course not found.');
@@ -87,7 +87,7 @@ export class CourseService {
     ReviewCourseDto: ReviewCourseDto,
     userId: string,
     courseId: string,
-  ): Promise<Course> {
+  ): Promise<CourseDocument> {
     const createRating = await this.RatingModel.create({user_id:userId, ...ReviewCourseDto});
 
     return await this.CourseModel.findByIdAndUpdate(

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import {
   CatDocument,
-  Category
+  Category,
 } from 'src/modules/categories/schemas/cat.schema';
 import {
   Rating,
@@ -15,10 +15,17 @@ export type CourseDocument = HydratedDocument<Course>;
 
 @Schema()
 export class Course extends BaseSchema {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Category.name,
+    autopopulate: true,
+  })
   category: CatDocument;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: Rating.name }] })
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: Rating.name }],
+    autopopulate: true,
+  })
   rating: RatingDocument[];
 
   @Prop()
@@ -39,7 +46,11 @@ export class Course extends BaseSchema {
   @Prop()
   status: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
+  })
   createdBy: UserDocument;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: User.name }] })
@@ -47,3 +58,4 @@ export class Course extends BaseSchema {
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
+CourseSchema.plugin(require('mongoose-autopopulate'));
