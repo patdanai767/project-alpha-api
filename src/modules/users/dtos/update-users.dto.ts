@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import mongoose from 'mongoose';
-import { ResumeDocument } from 'src/modules/resume/schemas/resume.schema';
 import { UserRole } from 'src/shared/enums/roles.enums';
 
 export class UpdateUserDto {
@@ -45,9 +44,4 @@ export class UpdateUserDto {
     type: String,
   })
   profileImage?: string;
-
-  @ApiProperty({
-    type: mongoose.Schema.ObjectId,
-  })
-  resume?: ResumeDocument;
 }

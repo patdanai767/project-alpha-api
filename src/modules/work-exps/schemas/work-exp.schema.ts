@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { User, UserDocument } from 'src/modules/users/schemas/user.schema';
 import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type WorkExperienceDocument = HydratedDocument<WorkExp>;
 
-@Schema()
-export class WorkExp extends BaseSchema{
+@Schema({timestamps:true})
+export class WorkExp extends BaseSchema {
   @Prop()
   title: string;
 
@@ -14,6 +15,14 @@ export class WorkExp extends BaseSchema{
 
   @Prop()
   duration: string;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
+  })
+  createdBy: UserDocument;
 }
 
 export const WorkExpSchema = SchemaFactory.createForClass(WorkExp);
+WorkExpSchema.plugin(require('mongoose-autopopulate'));

@@ -13,7 +13,7 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type CourseDocument = HydratedDocument<Course>;
 
-@Schema()
+@Schema({timestamps:true})
 export class Course extends BaseSchema {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,

@@ -8,7 +8,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CoursesModule } from './modules/courses/courses.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { RatingModule } from './modules/rating/rating.module';
-import { ResumeModule } from './modules/resume/resume.module';
 import { EducationModule } from './modules/education/education.module';
 import { CertifiesModule } from './modules/certifies/certifies.module';
 import { WorkExpsModule } from './modules/work-exps/work-exps.module';
@@ -29,7 +28,6 @@ import { NotificationModule } from './modules/notification/notification.module';
     NotificationModule,
     CategoriesModule,
     RatingModule,
-    ResumeModule,
     EducationModule,
     CertifiesModule,
     WorkExpsModule,

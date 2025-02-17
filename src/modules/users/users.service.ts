@@ -4,14 +4,12 @@ import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { UpdateUserDto } from './dtos/update-users.dto';
-import { Resume } from '../resume/schemas/resume.schema';
 import { UserResponseDto } from './dtos/response-users.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel(Resume.name) private resumeModel: Model<Resume>,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -34,7 +32,6 @@ export class UserService {
   async getProfile(userId: string): Promise<UserResponseDto> {
     const user = await this.userModel.findById(userId).lean<User>().exec();
     const {
-      resume,
       bio,
       sex,
       ranking,
@@ -64,12 +61,12 @@ export class UserService {
     return this.userModel.findByIdAndUpdate(userId, dataUpdate, { new: true });
   }
 
-  async updateResumeByUser(userId: string, resumeId: string): Promise<User> {
-    const FindResume = await this.resumeModel.findById(resumeId);
-    return await this.userModel.findByIdAndUpdate(
-      userId,
-      { $push: { resume: FindResume } },
-      { new: true },
-    );
-  }
+  // async updateResumeByUser(userId: string, resumeId: string): Promise<User> {
+  //   const FindResume = await this.resumeModel.findById(resumeId);
+  //   return await this.userModel.findByIdAndUpdate(
+  //     userId,
+  //     { $push: { resume: FindResume } },
+  //     { new: true },
+  //   );
+  // }
 }

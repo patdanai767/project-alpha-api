@@ -1,21 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 export class CreateEducationDto {
   @ApiProperty({
     example: 'KMITL',
     type: String,
   })
-  placeEducated: string;
+  @IsString()
+  placeEducated?: string;
 
   @ApiProperty({
-    example: '',
     type: String,
   })
-  description: string;
+  @IsString()
+  description?: string;
 
   @ApiProperty({
     example: 'Period',
     type: String,
   })
-  duration: string;
+  @IsString()
+  duration?: string;
 }

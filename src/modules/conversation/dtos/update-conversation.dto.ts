@@ -1,27 +1,21 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Url } from 'url';
 
 export class UpdateConversationDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
   })
-  _id?: string;
-
-  @ApiProperty({
-    type: String,
-  })
-  @IsNotEmpty()
   content?: string;
 
-  @IsOptional()
+  @ApiPropertyOptional()
   sentFromId?: string;
 
-  @IsOptional()
+  @ApiPropertyOptional()
   sentToId?: string;
 
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
   })
   mediaURL?: Url;

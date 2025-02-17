@@ -19,5 +19,6 @@ import { UsersModule } from '../users/users.module';
   ],
   controllers: [ConversationController],
   providers: [ConversationService],
+  exports: [ConversationService]
 })
 export class ConversationModule {}

@@ -12,5 +12,6 @@ import { Certification, CertificationSchema } from './schemas/certifies.schema';
   ],
   providers: [CertifiesService],
   controllers: [CertifiesController],
+  exports: [CertifiesService],
 })
 export class CertifiesModule {}

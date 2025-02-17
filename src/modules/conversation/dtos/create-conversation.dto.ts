@@ -1,20 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Url } from 'url';
 
 export class CreateConversationDto {
   @ApiProperty({
     type: String,
   })
-  @IsNotEmpty()
+  @IsString()
   content: string;
 
-  sentFromId?: string;
-
-  sentToId?: string;
+  @ApiProperty({
+    type:String
+  })
+  @IsMongoId()
+  sentToId: string;
 
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     type: String,
   })
   mediaURL?: Url;

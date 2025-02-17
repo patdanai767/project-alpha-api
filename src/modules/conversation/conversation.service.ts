@@ -1,40 +1,40 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Conversation } from './schemas/conversation.schema';
+import {
+  Conversation,
+  ConversationDocument,
+} from './schemas/conversation.schema';
 import { Model } from 'mongoose';
 import { CreateConversationDto } from './dtos/create-conversation.dto';
 import { UpdateConversationDto } from './dtos/update-conversation.dto';
-import { User } from '../users/schemas/user.schema';
-import { UserService } from '../users/users.service';
 
 @Injectable()
 export class ConversationService {
   constructor(
     @InjectModel(Conversation.name)
     private ConversationModel: Model<Conversation>,
-    private userService: UserService,
   ) {}
 
-  async findAll(): Promise<Conversation[]> {
+  async findAll(): Promise<ConversationDocument[]> {
     return await this.ConversationModel.find();
   }
 
-  async findById(id: string): Promise<Conversation> {
+  async findById(id: string): Promise<ConversationDocument> {
     return await this.ConversationModel.findById(id);
+  }
+
+  async findMyAll(id: string): Promise<ConversationDocument[]> {
+    return await this.ConversationModel.find({
+      $or: [{ sentToId: id }, { sentFromId: id }],
+    });
   }
 
   async createConversation(
     CreateConversationDto: CreateConversationDto,
     sentFromId: string,
-    sentToId: string,
-  ): Promise<Conversation> {
+  ): Promise<ConversationDocument> {
     return await this.ConversationModel.create({
       sentFromId: sentFromId,
-      sentToId: sentToId,
       ...CreateConversationDto,
     });
   }
@@ -42,7 +42,7 @@ export class ConversationService {
   async updateConversation(
     id: string,
     UpdateConversationDto: UpdateConversationDto,
-  ): Promise<Conversation> {
+  ): Promise<ConversationDocument> {
     return await this.ConversationModel.findByIdAndUpdate(
       id,
       UpdateConversationDto,
@@ -50,7 +50,7 @@ export class ConversationService {
     );
   }
 
-  async deleteConversation(id: string): Promise<Conversation> {
+  async deleteConversation(id: string): Promise<ConversationDocument> {
     return await this.ConversationModel.findByIdAndDelete(id);
   }
 }

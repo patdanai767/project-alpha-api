@@ -1,19 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import {
-  Resume,
-  ResumeDocument,
-} from 'src/modules/resume/schemas/resume.schema';
 import { UserRole } from 'src/shared/enums/roles.enums';
 import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({timestamps:true})
 export class User extends BaseSchema {
-  @Prop({ type: mongoose.Schema.ObjectId, ref: Resume.name})
-  resume: ResumeDocument;
-
   @Prop({
     unique: true,
     required: true,

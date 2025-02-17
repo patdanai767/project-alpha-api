@@ -1,9 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { User, UserDocument } from 'src/modules/users/schemas/user.schema';
 
 export type EducationDocument = HydratedDocument<Education>;
 
-@Schema()
+@Schema({timestamps:true})
 export class Education {
   @Prop()
   placeEducated: string;
@@ -13,6 +14,14 @@ export class Education {
 
   @Prop()
   duration: string;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
+  })
+  createdBy: UserDocument;
 }
 
 export const EducationSchema = SchemaFactory.createForClass(Education);
+EducationSchema.plugin(require('mongoose-autopopulate'));

@@ -21,7 +21,7 @@ export class CourseService {
   ) {}
 
   async findAll(): Promise<CourseDocument[]> {
-    return this.CourseModel.find().populate(['trainees', 'rating', 'category']); //populate => แปลง _id เป็น object หรือ ก็คือ relation
+    return this.CourseModel.find(); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
   async findById(id: string): Promise<CourseDocument> {

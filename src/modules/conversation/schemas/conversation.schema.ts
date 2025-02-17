@@ -5,12 +5,20 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type ConversationDocument = HydratedDocument<Conversation>;
 
-@Schema()
+@Schema({timestamps:true})
 export class Conversation extends BaseSchema {
-  @Prop({type:mongoose.Schema.ObjectId, ref: User.name})
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
+  })
   sentFromId: UserDocument;
 
-  @Prop({type:mongoose.Schema.ObjectId, ref: User.name})
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
+  })
   sentToId: UserDocument;
 
   @Prop()
@@ -24,3 +32,4 @@ export class Conversation extends BaseSchema {
 }
 
 export const ConversationSchema = SchemaFactory.createForClass(Conversation);
+ConversationSchema.plugin(require('mongoose-autopopulate'));

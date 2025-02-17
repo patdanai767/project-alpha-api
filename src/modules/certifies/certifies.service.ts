@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Certification } from './schemas/certifies.schema';
+import {
+  Certification,
+  CertificationDocument,
+} from './schemas/certifies.schema';
 import { Model } from 'mongoose';
 import { CreateCertifyDto } from './dtos/create-certifies.dto';
+import { UpdateCertifyDto } from './dtos/update-cretifies.dto';
 
 @Injectable()
 export class CertifiesService {
@@ -11,17 +15,35 @@ export class CertifiesService {
     private CertificationModel: Model<Certification>,
   ) {}
 
-  async findAll(): Promise<Certification[]> {
+  async findAll(): Promise<CertificationDocument[]> {
     return await this.CertificationModel.find();
   }
 
-  async createCertify(
-    CreateCertifyDto: CreateCertifyDto,
-  ): Promise<Certification> {
-    return await this.CertificationModel.create(CreateCertifyDto);
+  async findOne(id: string): Promise<CertificationDocument> {
+    return this.CertificationModel.findOne({ _id: id });
   }
 
-  async deleteCertify(id: string): Promise<Certification> {
+  async create(
+    createEducationDto: CreateCertifyDto,
+    id: string,
+  ): Promise<CertificationDocument> {
+    return await this.CertificationModel.create({
+      createdBy: id,
+      ...createEducationDto,
+    });
+  }
+
+  async update(
+    id: string,
+    updateEducationDto: UpdateCertifyDto,
+  ): Promise<CertificationDocument> {
+    return await this.CertificationModel.findOneAndUpdate(
+      { _id: id },
+      updateEducationDto,
+      { new: true },
+    );
+  }
+  async deleteCertify(id: string): Promise<CertificationDocument> {
     return await this.CertificationModel.findByIdAndDelete(id);
   }
 }

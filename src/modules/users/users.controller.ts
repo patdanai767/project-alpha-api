@@ -18,14 +18,11 @@ import { RoleGuard } from '../auth/commons/guards/role.guard';
 import { Roles } from '../auth/commons/decorators/roles.decorator';
 import { UserRole } from 'src/shared/enums/roles.enums';
 import { UpdateUserDto } from './dtos/update-users.dto';
-import { ResumeService } from '../resume/resume.service';
-import { CreateResumeDto } from '../resume/dtos/create-resume.dto';
 
 @Controller('user')
 export class UsersController {
   constructor(
     private readonly userService: UserService,
-    private readonly resumeService: ResumeService,
   ) {}
 
   @Get()
@@ -66,28 +63,28 @@ export class UsersController {
     return await this.userService.patchUserById(userId, dataUpdate);
   }
 
-  @Patch('/profile/resume')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  async updateResumeByUserId(
-    @Request() req: AuthenticatedRequest,
-    @Body() CreateResumeDto: CreateResumeDto,
-  ): Promise<User> {
-    //fix AuthenticatedRequest
-    const ExistResume = await this.resumeService.findById(req.user._id);
-    if (!ExistResume) {
-      const createResume =
-        await this.resumeService.createResume(CreateResumeDto);
-      const ResumeFind = await this.resumeService.findById(createResume._id);
-      return await this.userService.updateResumeByUser(
-        req.user._id,
-        ResumeFind._id,
-      );
-    }
-    const ResumeFind = await this.resumeService.findById(ExistResume._id);
-    return await this.userService.updateResumeByUser(
-      req.user._id,
-      ResumeFind._id,
-    );
-  }
+  // @Patch('/profile/resume')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth()
+  // async updateResumeByUserId(
+  //   @Request() req: AuthenticatedRequest,
+  //   @Body() CreateResumeDto: CreateResumeDto,
+  // ): Promise<User> {
+  //   //fix AuthenticatedRequest
+  //   const ExistResume = await this.resumeService.findById(req.user._id);
+  //   if (!ExistResume) {
+  //     const createResume =
+  //       await this.resumeService.createResume(CreateResumeDto);
+  //     const ResumeFind = await this.resumeService.findById(createResume._id);
+  //     return await this.userService.updateResumeByUser(
+  //       req.user._id,
+  //       ResumeFind._id,
+  //     );
+  //   }
+  //   const ResumeFind = await this.resumeService.findById(ExistResume._id);
+  //   return await this.userService.updateResumeByUser(
+  //     req.user._id,
+  //     ResumeFind._id,
+  //   );
+  // }
 }
