@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './schemas/user.schema';
+import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { UpdateUserDto } from './dtos/update-users.dto';
@@ -29,17 +29,9 @@ export class UserService {
       .exec();
   }
 
-  async getProfile(userId: string): Promise<UserResponseDto> {
+  async getProfile(userId: string): Promise<User> {
     const user = await this.userModel.findById(userId).lean<User>().exec();
-    const {
-      bio,
-      sex,
-      ranking,
-      profileImage,
-      password,
-      ...responseUser
-    } = user;
-    return responseUser;
+    return user;
   }
 
   async findById(id: string): Promise<User> {

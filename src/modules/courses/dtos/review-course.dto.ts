@@ -12,10 +12,4 @@ export class ReviewCourseDto {
     description: 'Course description',
   })
   description?: string;
-
-  @ApiProperty({
-    type: String,
-    description: 'Course is reviewed by',
-  })
-  rating?: string;
 }

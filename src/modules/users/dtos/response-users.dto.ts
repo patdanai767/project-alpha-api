@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { UserRole } from "src/shared/enums/roles.enums";
+import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from 'src/shared/enums/roles.enums';
 
 export class UserResponseDto {
   @ApiProperty({
@@ -24,14 +24,14 @@ export class UserResponseDto {
     description: 'User fullname',
     type: String,
   })
-  fullname:string;
+  fullname: string;
 
   @ApiProperty({
     description: 'User role',
     type: String,
-    enum: [UserRole.TRAINEE, UserRole.TRAINER]
+    enum: [UserRole.TRAINEE, UserRole.TRAINER],
   })
-  role: UserRole
+  role: UserRole;
 
   @ApiProperty({
     description: 'User created date',
