@@ -17,7 +17,7 @@ export class CreateCourseDto {
     type: String,
     description: 'Course Title',
   })
-  title: string;
+  title?: string;
 
   @IsNotEmpty()
   @ApiProperty({
@@ -26,7 +26,7 @@ export class CreateCourseDto {
     type: String,
     description: 'Course description',
   })
-  description: string;
+  description?: string;
 
   @IsNotEmpty()
   @ApiProperty({
@@ -34,7 +34,7 @@ export class CreateCourseDto {
     type: Number,
     description: 'Course price',
   })
-  price: number;
+  price?: number;
 
   @IsNotEmpty()
   @ApiProperty({
@@ -42,7 +42,7 @@ export class CreateCourseDto {
     type: Number,
     description: 'Course duration (day)',
   })
-  duration: number;
+  duration?: number;
 
   @ApiProperty({
     example: 'Thumbnail.jpg',

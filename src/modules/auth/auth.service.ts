@@ -10,12 +10,14 @@ import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
 import { JwtInterface } from './interfaces/jwt-payload.interface';
+import { CourseService } from '../courses/courses.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private courseService: CourseService,
   ) {}
 
   async login(LoginDto: LoginDto): Promise<AuthResponseDto> {
@@ -48,6 +50,13 @@ export class AuthService {
     const user = await this.userService.createUser(RegisterDto);
 
     const accessToken = await this.generateAccessToken(user._id);
+
+    if (RegisterDto.role === 'trainer') {
+      await this.courseService.createCourse(
+        { title: user.fullname, status: 'draft' },
+        user._id,
+      );
+    }
 
     return { user, accessToken };
   }

@@ -5,9 +5,10 @@ import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './commons/constants';
 import { JwtAccessTokenStrategy } from './strategies/jwt.strategy';
+import { CoursesModule } from '../courses/courses.module';
 
 @Module({
-    imports: [UsersModule,
+    imports: [UsersModule,CoursesModule,
       JwtModule.register({
         global:true,
         secret: jwtConstants.secret,

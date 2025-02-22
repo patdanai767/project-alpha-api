@@ -17,12 +17,4 @@ export class CreateCoinDto {
     example: StatusCoin.Add,
   })
   status: StatusCoin;
-
-  @ApiProperty({
-    type: Number,
-  })
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  currentCoin?: number;
 }

@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './courses.service';
-import { Course } from './schemas/course.schema';
+import { Course, CourseDocument } from './schemas/course.schema';
 import { CreateCourseDto } from './dtos/create-course.dto';
 import { UpdateCourseDto } from './dtos/update-course.dto';
 import { JwtAuthGuard } from '../auth/commons/guards/jwt.guard';
@@ -30,9 +30,14 @@ export class CoursesController {
     return this.courseService.findAll();
   }
 
-  @Get('/:id')
-  async getCourse(@Param('id') courseId: string): Promise<Course> {
-    return this.courseService.findById(courseId);
+  @Get('/mycourse')
+  @Roles(UserRole.TRAINER)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiBearerAuth()
+  async myCourse(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<CourseDocument> {
+    return await this.courseService.findMyCourse(req.user._id);
   }
 
   @Post()

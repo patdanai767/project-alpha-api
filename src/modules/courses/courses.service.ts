@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Course, CourseDocument } from './schemas/course.schema';
-import { Model } from 'mongoose';
+import { Model, RootFilterQuery } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateCourseDto } from './dtos/create-course.dto';
 import { UpdateCourseDto } from './dtos/update-course.dto';
@@ -17,15 +17,21 @@ export class CourseService {
   constructor(
     @InjectModel(Course.name) private CourseModel: Model<Course>,
     @InjectModel(User.name) private UserModel: Model<User>,
-    @InjectModel(Rating.name) private RatingModel:Model<Rating>,
+    @InjectModel(Rating.name) private RatingModel: Model<Rating>,
   ) {}
 
   async findAll(): Promise<CourseDocument[]> {
-    return this.CourseModel.find(); //populate => แปลง _id เป็น object หรือ ก็คือ relation
+    return await this.CourseModel.find(); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
-  async findById(id: string): Promise<CourseDocument> {
-    return this.CourseModel.findById(id);
+  // async findOne(
+  //   filter: RootFilterQuery<CourseDocument>,
+  // ): Promise<CourseDocument> {
+  //   return await this.CourseModel.findOne(filter);
+  // }
+
+  async findMyCourse(id: string) {
+    return await this.CourseModel.findOne({ createdBy: id });
   }
 
   async createCourse(
@@ -42,16 +48,19 @@ export class CourseService {
     id: string,
     UpdateCourseDto: UpdateCourseDto,
   ): Promise<CourseDocument> {
-    return this.CourseModel.findByIdAndUpdate(id, UpdateCourseDto, {
+    return await this.CourseModel.findByIdAndUpdate(id, UpdateCourseDto, {
       new: true,
     });
   }
 
   async deleteCourseById(id: string): Promise<CourseDocument> {
-    return this.CourseModel.findByIdAndDelete(id);
+    return await this.CourseModel.findByIdAndDelete(id);
   }
 
-  async enrollCourse(userId: string, courseId: string): Promise<CourseDocument> {
+  async enrollCourse(
+    userId: string,
+    courseId: string,
+  ): Promise<CourseDocument> {
     const course = await this.CourseModel.findById(courseId);
     if (!course) {
       throw new NotFoundException('Course not found.');
@@ -88,12 +97,15 @@ export class CourseService {
     userId: string,
     courseId: string,
   ): Promise<CourseDocument> {
-    const createRating = await this.RatingModel.create({user_id:userId, ...ReviewCourseDto});
+    const createRating = await this.RatingModel.create({
+      user_id: userId,
+      ...ReviewCourseDto,
+    });
 
     return await this.CourseModel.findByIdAndUpdate(
       courseId,
       {
-        $push: { rating: createRating},
+        $push: { rating: createRating },
       },
       {
         new: true,
