@@ -5,7 +5,7 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class User extends BaseSchema {
   @Prop({
     unique: true,
@@ -41,6 +41,11 @@ export class User extends BaseSchema {
 
   @Prop()
   sex: string;
+
+  @Prop({
+    default: 10,
+  })
+  coin: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

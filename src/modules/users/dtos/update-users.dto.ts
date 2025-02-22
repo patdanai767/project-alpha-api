@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import mongoose from 'mongoose';
 import { UserRole } from 'src/shared/enums/roles.enums';
 
 export class UpdateUserDto {
@@ -44,4 +43,9 @@ export class UpdateUserDto {
     type: String,
   })
   profileImage?: string;
+
+  @ApiProperty({
+    type:Number,
+  })
+  coin?: number
 }

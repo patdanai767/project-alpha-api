@@ -13,6 +13,7 @@ import { CertifiesModule } from './modules/certifies/certifies.module';
 import { WorkExpsModule } from './modules/work-exps/work-exps.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { CoinsModule } from './modules/coins/coins.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { NotificationModule } from './modules/notification/notification.module';
     EducationModule,
     CertifiesModule,
     WorkExpsModule,
+    CoinsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

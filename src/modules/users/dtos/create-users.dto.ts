@@ -59,4 +59,7 @@ export class CreateUserDto {
 
   @IsOptional()
   resume?: string;
+
+  @IsOptional()
+  coin?: number;
 }
