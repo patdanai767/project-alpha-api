@@ -30,19 +30,27 @@ export class CoursesController {
     return this.courseService.findAll();
   }
 
-  @Get('/:id')
-  async getCourse(@Param('id') id: string): Promise<Course> {
-    return this.courseService.findOne({ _id: id });
-  }
-
   @Get('/mycourse')
-  @Roles(UserRole.TRAINER)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth()
   async myCourse(
     @Request() req: AuthenticatedRequest,
   ): Promise<CourseDocument> {
     return await this.courseService.findMyCourse(req.user._id);
+  }
+
+  @Get('/myFavorite')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async myConversations(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<CourseDocument[]> {
+    return await this.courseService.findMyAll(req.user._id);
+  }
+
+  @Get('/:id')
+  async getCourse(@Param('id') id: string): Promise<Course> {
+    return this.courseService.findOne({ _id: id });
   }
 
   @Post()
@@ -98,5 +106,15 @@ export class CoursesController {
       req.user._id,
       courseId,
     );
+  }
+
+  @Patch('/:id/like')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async likeCourse(
+    @Param('id') courseId: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<Course> {
+    return this.courseService.likeCourse(req.user._id, courseId);
   }
 }

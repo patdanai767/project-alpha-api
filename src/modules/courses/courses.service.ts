@@ -24,6 +24,10 @@ export class CourseService {
     return await this.CourseModel.find(); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
+  async findMyAll(id: string): Promise<CourseDocument[]> {
+    return await this.CourseModel.find({ likes: { $in: [id] } });
+  }
+
   async findOne(
     filter: RootFilterQuery<CourseDocument>,
   ): Promise<CourseDocument> {
@@ -110,6 +114,34 @@ export class CourseService {
       {
         new: true,
       },
+    );
+  }
+
+  async likeCourse(userId: string, courseId: string) {
+    const course = await this.CourseModel.findById(courseId);
+    if (!course) {
+      throw new NotFoundException('Course not found.');
+    }
+
+    const userExist = await this.UserModel.exists({ _id: userId });
+    if (!userExist) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const user = await this.CourseModel.findOne({
+      _id: courseId,
+      like: userId,
+    });
+    if (user) {
+      throw new ConflictException('You already liked this course.');
+    }
+
+    return await this.CourseModel.findByIdAndUpdate(
+      courseId,
+      {
+        $addToSet: { likes: userId },
+      },
+      { new: true },
     );
   }
 }

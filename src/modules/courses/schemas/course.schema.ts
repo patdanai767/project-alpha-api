@@ -61,6 +61,9 @@ export class Course extends BaseSchema {
 
   @Prop()
   DateBusiness: string;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: User.name }] })
+  likes: UserDocument[];
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
