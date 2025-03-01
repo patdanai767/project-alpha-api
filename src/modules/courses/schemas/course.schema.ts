@@ -13,7 +13,7 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type CourseDocument = HydratedDocument<Course>;
 
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Course extends BaseSchema {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +55,12 @@ export class Course extends BaseSchema {
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: User.name }] })
   trainees: UserDocument[];
+
+  @Prop()
+  timeBusiness: string;
+
+  @Prop()
+  DateBusiness: string;
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);

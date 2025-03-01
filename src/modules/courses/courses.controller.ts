@@ -30,6 +30,11 @@ export class CoursesController {
     return this.courseService.findAll();
   }
 
+  @Get('/:id')
+  async getCourse(@Param('id') id: string): Promise<Course> {
+    return this.courseService.findOne({ _id: id });
+  }
+
   @Get('/mycourse')
   @Roles(UserRole.TRAINER)
   @UseGuards(JwtAuthGuard, RoleGuard)

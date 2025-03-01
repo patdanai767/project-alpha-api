@@ -21,9 +21,7 @@ import { UpdateUserDto } from './dtos/update-users.dto';
 
 @Controller('user')
 export class UsersController {
-  constructor(
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, RoleGuard)

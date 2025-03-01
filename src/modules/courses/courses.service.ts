@@ -24,11 +24,11 @@ export class CourseService {
     return await this.CourseModel.find(); //populate => แปลง _id เป็น object หรือ ก็คือ relation
   }
 
-  // async findOne(
-  //   filter: RootFilterQuery<CourseDocument>,
-  // ): Promise<CourseDocument> {
-  //   return await this.CourseModel.findOne(filter);
-  // }
+  async findOne(
+    filter: RootFilterQuery<CourseDocument>,
+  ): Promise<CourseDocument> {
+    return await this.CourseModel.findOne(filter);
+  }
 
   async findMyCourse(id: string) {
     return await this.CourseModel.findOne({ createdBy: id });

@@ -80,4 +80,20 @@ export class UpdateCourseDto {
     enum: CourseStatus,
   })
   status?: string;
+
+  @IsString()
+  @ApiProperty({
+    example: '09:00 - 17:00',
+    type: String,
+    description: 'Course time business',
+  })
+  timeBusiness?: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'Mon - Fri',
+    type: String,
+    description: 'Course start date',
+  })
+  dateBusiness?: string;
 }
