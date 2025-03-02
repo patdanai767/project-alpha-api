@@ -144,4 +144,32 @@ export class CourseService {
       { new: true },
     );
   }
+
+  async removeLikeCourse(userId: string, courseId: string) {
+    const course = await this.CourseModel.findById(courseId);
+    if (!course) {
+      throw new NotFoundException('Course not found.');
+    }
+
+    const userExist = await this.UserModel.exists({ _id: userId });
+    if (!userExist) {
+      throw new NotFoundException('User not found.');
+    }
+
+    const user = await this.CourseModel.findOne({
+      _id: courseId,
+      like: userId,
+    });
+    if (user) {
+      throw new ConflictException(`You've already removed a like this course.`);
+    }
+
+    return await this.CourseModel.findByIdAndUpdate(
+      courseId,
+      {
+        $pull: { likes: userId },
+      },
+      { new: true },
+    );
+  }
 }

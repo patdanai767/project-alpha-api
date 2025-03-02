@@ -117,4 +117,14 @@ export class CoursesController {
   ): Promise<Course> {
     return this.courseService.likeCourse(req.user._id, courseId);
   }
+
+  @Patch('/:id/removeLike')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async removeLikeCourse(
+    @Param('id') courseId: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<Course> {
+    return this.courseService.removeLikeCourse(req.user._id, courseId);
+  }
 }
