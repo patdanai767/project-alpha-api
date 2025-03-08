@@ -14,6 +14,7 @@ import { WorkExpsModule } from './modules/work-exps/work-exps.module';
 import { ConversationModule } from './modules/conversation/conversation.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { CoinsModule } from './modules/coins/coins.module';
+import { MeetingModule } from './modules/meeting/meeting.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CoinsModule } from './modules/coins/coins.module';
     CertifiesModule,
     WorkExpsModule,
     CoinsModule,
+    MeetingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
