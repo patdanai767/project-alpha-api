@@ -102,7 +102,7 @@ export class CourseService {
     courseId: string,
   ): Promise<CourseDocument> {
     const createRating = await this.RatingModel.create({
-      user_id: userId,
+      createdBy: userId,
       ...ReviewCourseDto,
     });
 

@@ -55,8 +55,7 @@ export class MeetingController {
   }
 
   @Patch('/:id')
-  @Roles(UserRole.TRAINER, UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async updateMeeting(
     @Body() updateMeetingDto: UpdateMeetingDto,

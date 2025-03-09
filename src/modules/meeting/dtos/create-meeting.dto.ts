@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { meetingStatus } from 'src/shared/enums/meetingStatus.enums';
 
 export class CreateMeetingDto {
   @ApiProperty({
@@ -15,6 +16,14 @@ export class CreateMeetingDto {
 
   @ApiProperty({
     type: String,
+    description: "meeting's status",
+    enum: meetingStatus,
+    example: meetingStatus.Continue,
+  })
+  status: meetingStatus;
+
+  @ApiProperty({
+    type: String,
     description: 'trainee ID',
   })
   trainee: string;
@@ -26,6 +35,11 @@ export class CreateMeetingDto {
   })
   startedAt: Date;
 
+  @ApiProperty({
+    type: String,
+    description: 'trainee ID',
+    example: new Date(),
+  })
   @ApiProperty({
     type: String,
     description: 'trainee ID',
