@@ -4,6 +4,7 @@ import { Meeting, MeetingDocument } from './schemas/meeting.schema';
 import { Model, RootFilterQuery } from 'mongoose';
 import { CreateMeetingDto } from './dtos/create-meeting.dto';
 import { UpdateMeetingDto } from './dtos/update-meeting.dto';
+import { User } from '../users/schemas/user.schema';
 
 @Injectable()
 export class MeetingService {
@@ -28,12 +29,12 @@ export class MeetingService {
   }
 
   async create(
-    createMeeting: CreateMeetingDto,
+    createMeetingDto: CreateMeetingDto,
     userId: string,
   ): Promise<MeetingDocument> {
     return await this.MeetingModel.create({
       createdBy: userId,
-      ...createMeeting,
+      ...createMeetingDto,
     });
   }
 

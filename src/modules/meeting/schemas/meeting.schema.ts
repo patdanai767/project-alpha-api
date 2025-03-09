@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { User, UserDocument } from 'src/modules/users/schemas/user.schema';
+import { meetingStatus } from 'src/shared/enums/meetingStatus.enums';
 
 export type MeetingDocument = HydratedDocument<Meeting>;
 
@@ -18,6 +19,9 @@ export class Meeting {
     autopopulate: true,
   })
   trainee: UserDocument;
+
+  @Prop()
+  status: meetingStatus;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,

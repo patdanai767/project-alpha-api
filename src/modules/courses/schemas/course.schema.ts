@@ -53,7 +53,15 @@ export class Course extends BaseSchema {
   })
   createdBy: UserDocument;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: User.name }] })
+  @Prop({
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User.name,
+        autopopulate: true,
+      },
+    ],
+  })
   trainees: UserDocument[];
 
   @Prop()
