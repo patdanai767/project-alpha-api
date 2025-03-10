@@ -6,7 +6,7 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type RatingDocument = HydratedDocument<Rating>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Rating extends BaseSchema {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
