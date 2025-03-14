@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: trainerNext
+    image: trainernext
+    build:
+      context: .
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "8080:8080"
