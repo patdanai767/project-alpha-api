@@ -11,7 +11,7 @@ import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
 import { JwtInterface } from './interfaces/jwt-payload.interface';
 import { CourseService } from '../courses/courses.service';
-import { hash,verify } from 'argon2';
+import { hash, verify } from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -24,10 +24,13 @@ export class AuthService {
   async login(LoginDto: LoginDto): Promise<AuthResponseDto> {
     const existsUser = await this.userService.getUserByEmail(LoginDto.email);
     if (!existsUser) {
-      throw new NotFoundException();
+      throw new NotFoundException(LoginDto.email);
     }
-    const isPasswordValid = await verify(existsUser.password, LoginDto.password);
-    if (isPasswordValid) {
+    const isPasswordValid = await verify(
+      existsUser.password,
+      LoginDto.password,
+    );
+    if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
 
@@ -50,7 +53,7 @@ export class AuthService {
     const registerHashDto = {
       ...RegisterDto,
       password: await hash(RegisterDto.password),
-    }
+    };
     const user = await this.userService.createUser(registerHashDto);
 
     const accessToken = await this.generateAccessToken(user._id);
