@@ -17,4 +17,10 @@ export class CreateCoinDto {
     example: StatusCoin.Add,
   })
   status: StatusCoin;
+
+  @ApiProperty({
+    type: String,
+    description: 'User Id'
+  })
+  userId?: string;
 }

@@ -32,6 +32,17 @@ export class CoinsService {
   ): Promise<CoinDocument> {
     const user = await this.userService.findById(userId);
     if (createCoinDto.status === 'add') {
+      if (createCoinDto.userId) {
+        const userExist = await this.userService.findById(createCoinDto.userId);
+        await this.userService.updateCoinById(createCoinDto.userId, {
+          $inc: { coin: createCoinDto.coin },
+        });
+        return await this.CoinModel.create({
+          user: createCoinDto.userId,
+          currentCoin: userExist.coin + createCoinDto.coin,
+          ...createCoinDto,
+        });
+      }
       await this.userService.updateCoinById(userId, {
         $inc: { coin: createCoinDto.coin },
       });
