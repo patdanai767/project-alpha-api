@@ -6,13 +6,14 @@ import { BaseSchema } from 'src/shared/schemas/base.schema';
 
 export type RatingDocument = HydratedDocument<Rating>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Rating extends BaseSchema {
-
   @Prop({
-    type:mongoose.Schema.ObjectId, ref:User.name
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    autopopulate: true,
   })
-  user_id: UserDocument;
+  createdBy: UserDocument;
 
   @Prop({
     required: true,
@@ -26,3 +27,4 @@ export class Rating extends BaseSchema {
 }
 
 export const RatingSchema = SchemaFactory.createForClass(Rating);
+RatingSchema.plugin(require('mongoose-autopopulate'));

@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
+import { meetingStatus } from 'src/shared/enums/meetingStatus.enums';
 
 export class UpdateMeetingDto {
   @ApiPropertyOptional({
@@ -15,6 +16,15 @@ export class UpdateMeetingDto {
   })
   @IsOptional()
   description?: string;
+
+  @ApiPropertyOptional({
+    type: String,
+    description: "meeting's status",
+    enum: meetingStatus,
+    example: meetingStatus.Continue,
+  })
+  @IsEnum(meetingStatus)
+  status?: meetingStatus;
 
   @ApiPropertyOptional({
     type: String,

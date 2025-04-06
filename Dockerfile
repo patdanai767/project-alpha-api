@@ -1,18 +1,29 @@
-FROM node:20-alpine
+FROM node:20-alpine AS base
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY ./package.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install 
+RUN npm ci 
+
+FROM node:20-alpine AS builder
+
+WORKDIR /app
 
 COPY . .
+COPY --from=base /app/node_modules ./node_modules
+
+RUN npm run build
+
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./package.json
+COPY .env .env
 
 EXPOSE 8080
 
-ENV NODE_ENV=production
-ENV PORT=8080
-ENV HOST=0.0.0.0
-
-
-CMD ["npm", "run", "start:prod", "--host=0.0.0.0"] 
+CMD ["node", "dist/main.js"]

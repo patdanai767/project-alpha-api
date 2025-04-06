@@ -28,20 +28,11 @@ export class MeetingController {
   async getMeetings(): Promise<MeetingDocument[]> {
     return await this.meetingService.find();
   }
-  
+
   @Get('/myMeeting')
   @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiBearerAuth()
   async getMyMeetings(
-    @Request() req: AuthenticatedRequest,
-  ): Promise<MeetingDocument[]> {
-    return await this.meetingService.findMyMeeting(req.user._id);
-  }
-
-  @Get('myTrainee')
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @ApiBearerAuth()
-  async getMyTrainee(
     @Request() req: AuthenticatedRequest,
   ): Promise<MeetingDocument[]> {
     return await this.meetingService.findMyMeeting(req.user._id);
@@ -64,8 +55,7 @@ export class MeetingController {
   }
 
   @Patch('/:id')
-  @Roles(UserRole.TRAINER, UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async updateMeeting(
     @Body() updateMeetingDto: UpdateMeetingDto,
